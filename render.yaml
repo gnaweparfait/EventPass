@@ -3,13 +3,47 @@ services:
     name: eventpass
     env: php
     plan: free
+    rootDir: .
     buildCommand: |
-      composer install
-      npm install
+      composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+      npm ci
       npm run build
-    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+      php artisan storage:link || true
+      chmod -R ug+rwx storage bootstrap/cache
+    startCommand: php -S 0.0.0.0:$PORT -t public
     envVars:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
+      - key: APP_URL
+        sync: false
+      - key: APP_KEY
+        sync: false
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: LOG_CHANNEL
+        value: stack
+      - key: FILESYSTEM_DISK
+        value: public
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: NODE_VERSION
+        value: 20
