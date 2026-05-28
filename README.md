@@ -138,6 +138,37 @@ php artisan migrate
 php artisan db:seed
 ```
 
+### Setup local avec XAMPP (Windows)
+
+1. Démarrer **Apache** et **MySQL** dans XAMPP.
+2. Créer la base `eventpass` dans phpMyAdmin (collation `utf8mb4_unicode_ci` recommandée).
+3. Configurer `.env` :
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=eventpass
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+4. Appliquer les migrations :
+
+```bash
+php artisan config:clear
+php artisan migrate
+```
+
+5. Lancer l'application :
+
+```bash
+php artisan serve
+npm run dev
+```
+
+Puis ouvrir : [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
 ---
 
 ## Configuration
